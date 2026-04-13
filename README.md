@@ -1,5 +1,9 @@
 ## C - Simple Shell
 ---
+Background Context
+  
+Write a simple UNIX command interpreter
+---
 #### Table of contents
 - [0. README, man, AUTHORS](#0-readme-man-authors)
 - [1. Betty would be proud](#1-betty-would-be-proud)
