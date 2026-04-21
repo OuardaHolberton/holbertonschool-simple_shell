@@ -1,280 +1,237 @@
-## C - Simple Shell
+# 🐚 Simple Shell — hsh
+
+> A simple UNIX command line interpreter written in C.  
+> Project by **Ouarda** & **Ulysse** — Holberton School, 2026.
+
 ---
-#### Table of contents
-- [0. README, man, AUTHORS](#0-readme-man-authors)
-- [1. Betty would be proud](#1-betty-would-be-proud)
-- [2. Simple shell 0.1](#2-simple-shell-01)
-- [3. Simple shell 0.2](#3-simple-shell-02)
-- [4. Simple shell 0.3](#4-simple-shell-03)
-- [5. Simple shell 0.4](#5-simple-shell-04)
-- [6. Simple shell 1.0](#6-simple-shell-10)
+
+## Table of Contents
+
+- [Description](#description)
+- [Flowchart](#flowchart)
 - [Requirements](#requirements)
-	- [General](#general)
-	- [GitHub](#github)
-	- [Output](#output)
-	- [List of allowed functions and system calls+](#list-of-allowed-functions-and-system-calls)
-	- [Compilation](#compilation)
-	- [Testing](#testing)
-	- [Checks](#checks)
-  
+- [File Structure](#file-structure)
+- [Compilation](#compilation)
+- [Usage](#usage)
+- [Built-ins](#built-ins)
+- [Examples](#examples)
+- [Authors](#authors)
+
 ---
-#### 0. README, man, AUTHORS
 
-- Write a ```README```
-- Write a ```man``` for your shell.
-- You should have an ```AUTHORS``` file at the root of your repository, listing all individuals having contributed content to the repository. Format, see [Docker](https://github.com/moby/moby/blob/master/AUTHORS)
-  
-[^](#table-of-contents)
-  
+## Description
+
+`hsh` is a simple UNIX command line interpreter that mimics the behavior of `/bin/sh`.  
+It reads commands from standard input, locates executables using the `PATH` environment variable, and executes them via `fork` and `execve`.
+
+It supports both **interactive mode** (with a prompt `$`) and **non-interactive mode** (piped input or file redirection).
+
 ---
-#### 1. Betty would be proud
 
-Write a beautiful code that passes the Betty checks
-  
-[^](#table-of-contents)
-  
+## Flowchart
+
+![Simple Shell Flowchart](flowchart.webp)
+
 ---
-#### 2. Simple shell 0.1
 
-Write a UNIX command line interpreter.
-
-- Usage: simple_shell
-Your Shell should:
-
-- Display a prompt and wait for the user to type a command. A command line always ends with a new line.
-- The prompt is displayed again each time a command has been executed.
-- The command lines are simple, no semicolons, no pipes, no redirections or any other advanced features.
-- The command lines are made only of one word. No arguments will be passed to programs.
-- If an executable cannot be found, print an error message and display the prompt again.
-- Handle errors.
-- You have to handle the "end of file" condition (```Ctrl+D```)
-You don't have to:
-
-- use the ```PATH```
-- implement built-ins
-- handle special characters : ``` ", ', `, \, *, &, # ```
-- be able to move the cursor
-- handle commands with arguments
-```execve``` will be the core part of your Shell, don't forget to pass the environ to it…
-  
-desired output:  
-```
-julien@ubuntu:~/shell$ ./shell 
-#cisfun$ ls
-./shell: No such file or directory
-#cisfun$ /bin/ls
-barbie_j       env-main.c  exec.c  fork.c  pid.c  ppid.c    prompt   prompt.c  shell.c    stat.c         wait
-env-environ.c  exec       fork    mypid   ppid   printenv  promptc  shell     stat test_scripting.sh  wait.c
-#cisfun$ ^[[D^[[D^[[D
-./shell: No such file or directory
-#cisfun$ ^[[C^[[C^[[C^[[C
-./shell: No such file or directory
-#cisfun$ exit
-./shell: No such file or directory
-#cisfun$ ^C
-julien@ubuntu:~/shell$ echo "/bin/ls" | ./shell
-barbie_j       env-main.c  exec.c  fork.c  pid.c  ppid.c    prompt   prompt.c  shell.c    stat.c         wait
-env-environ.c  exec       fork    mypid   ppid   printenv  promptc  shell     stat test_scripting.sh  wait.c
-julien@ubuntu:~/shell$
-```
-  
-[^](#table-of-contents)
-  
----
-#### 3. Simple shell 0.2
-
-Simple shell 0.1 +
-
-- Handle command lines with argumentsdesired output:  
-  
-[^](#table-of-contents)
-  
----
-#### 4. Simple shell 0.3
-
-Simple shell 0.2 +
-
-- Handle the ```PATH```
-- ```fork``` must not be called if the command doesn't exist
-  
-desired output:  
-```
-julien@ubuntu:~/shell$ ./shell_0.3
-:) /bin/ls
-barbie_j       env-main.c  exec.c  fork.c  pid.c  ppid.c    prompt   prompt.c  shell_0.3  stat      test_scripting.sh  wait.c
-env-environ.c  exec       fork    mypid   ppid   printenv  promptc  shell     shell.c    stat.c  wait
-:) ls
-barbie_j       env-main.c  exec.c  fork.c  pid.c  ppid.c    prompt   prompt.c  shell_0.3  stat      test_scripting.sh  wait.c
-env-environ.c  exec       fork    mypid   ppid   printenv  promptc  shell     shell.c    stat.c  wait
-:) ls -l /tmp 
-total 20
--rw------- 1 julien julien    0 Dec  5 12:09 config-err-aAMZrR
-drwx------ 3 root   root   4096 Dec  5 12:09 systemd-private-062a0eca7f2a44349733e78cb4abdff4-colord.service-V7DUzr
-drwx------ 3 root   root   4096 Dec  5 12:09 systemd-private-062a0eca7f2a44349733e78cb4abdff4-rtkit-daemon.service-ANGvoV
-drwx------ 3 root   root   4096 Dec  5 12:07 systemd-private-062a0eca7f2a44349733e78cb4abdff4-systemd-timesyncd.service-CdXUtH
--rw-rw-r-- 1 julien julien    0 Dec  5 12:09 unity_support_test.0
-:) ^C
-julien@ubuntu:~/shell$ 
-```
-  
-[^](#table-of-contents)
-  
----
-#### 5. Simple shell 0.4
-
-Simple shell 0.3 +
-
-- Implement the ```exit``` built-in, that exits the shell
-- Usage: ```exit```
-- You don't have to handle any argument to the built-in ```exit```
-   
-[^](#table-of-contents)
-  
----
-#### 6. Simple shell 1.0
-
-Simple shell 0.4 +
-
-- Implement the ```env``` <bold>built-in</bold>, that prints the current environment
-  
-desired output:  
-```
-julien@ubuntu:~/shell$ ./simple_shell
-$ env
-USER=julien
-LANGUAGE=en_US
-SESSION=ubuntu
-COMPIZ_CONFIG_PROFILE=ubuntu
-SHLVL=1
-HOME=/home/julien
-C_IS=Fun_:)
-DESKTOP_SESSION=ubuntu
-LOGNAME=julien
-TERM=xterm-256color
-PATH=/home/julien/bin:/home/julien/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
-DISPLAY=:0
-$ exit
-julien@ubuntu:~/shell$ 
-```
-  
-[^](#table-of-contents)
-  
----
 ## Requirements
 
-#### General
-  
-- Allowed editors: ```vi```, ```vim```, ```emacs```
-- All your files will be compiled on Ubuntu 20.04 LTS using ```gcc```, using the options ```-Wall -Werror -Wextra -pedantic -std=gnu89```
-- All your files should end with a new line
-- A ```README.md``` file, at the root of the folder of the project is mandatory
-- Your code should use the ```Betty``` style. It will be checked using ```betty-style.pl``` and ```betty-doc.pl```
-- Your shell should not have any memory leaks
-- No more than 5 functions per file
-- All your header files should be include guarded
-- Use system calls only when you need to
+- Ubuntu 20.04 LTS
+- gcc with flags: `-Wall -Werror -Wextra -pedantic -std=gnu89`
+- Betty style compliant
+- No memory leaks
+- Max 5 functions per file
+- All header files include-guarded
 
-#### GitHub
-  
-There should be one project repository per group. If you clone/fork/whatever a project repository with the same name before the second deadline, you risk a 0% score.
+---
 
-More Info
-  
-#### Output
-  
-- Unless specified otherwise, your program must have the exact same output as ```sh``` (```/bin/sh```) as well as the exact same error output.
-- The only difference is when you print an error, the name of the program must be equivalent to your ```argv[0]``` (See below)
-Example of error with ```sh:```
+## File Structure
+
 ```
-julien@ubuntu:/# echo "qwerty" | /bin/sh
-/bin/sh: 1: qwerty: not found
-julien@ubuntu:/# echo "qwerty" | /bin/../bin/sh
-/bin/../bin/sh: 1: qwerty: not found
-```
-Same error with your program ```hsh```:
-```
-julien@ubuntu:/# echo "qwerty" | ./hsh
-./hsh: 1: qwerty: not found
-julien@ubuntu:/# echo "qwerty" | ./././hsh
-./././hsh: 1: qwerty: not found
+holbertonschool-simple_shell/
+├── main.c
+├── shell.c
+├── utils.c
+├── path.c
+├── builtins.c
+├── hsh.h
+├── man_1_simple_shell
+├── AUTHORS
+├── README.md
+└── flowchart.webp
 ```
 
-#### List of allowed functions and system calls+
+---
 
-- all functions from string.h
-- ```access``` (man 2 access)
-- ```chdir``` (man 2 chdir)
-- ```close``` (man 2 close)
-- ```closedir``` (man 3 closedir)
-- ```execve``` (man 2 execve)
-- ```exit``` (man 3 exit)
-- ```_exit``` (man 2 _exit)
-- ```fflush``` (man 3 fflush)
-- ```fork``` (man 2 fork)
-- ```free``` (man 3 free)
-- ```getcwd``` (man 3 getcwd)
-- ```getline``` (man 3 getline)
-- ```getpid``` (man 2 getpid)
-- ```isatty``` (man 3 isatty)
-- ```kill``` (man 2 kill)
-- ```malloc``` (man 3 malloc)
-- ```open``` (man 2 open)
-- ```opendir``` (man 3 opendir)
-- ```perror``` (man 3 perror)
-- ```printf``` (man 3 printf)
-- ```fprintf``` (man 3 fprintf)
-- ```vfprintf``` (man 3 vfprintf)
-- ```sprintf``` (man 3 sprintf)
-- ```putchar``` (man 3 putchar)
-- ```read``` (man 2 read)
-- ```readdir``` (man 3 readdir)
-- ```signal``` (man 2 signal)
-- ```stat``` (__xstat) (man 2 stat)
-- ```lstat``` (__lxstat) (man 2 lstat)
-- ```fstat``` (__fxstat) (man 2 fstat)
-- ```strtok``` (man 3 strtok)
-- ```wait``` (man 2 wait)
-- ```waitpid``` (man 2 waitpid)
-- ```wait3``` (man 2 wait3)
-- ```wait4``` (man 2 wait4)
-- ```write``` (man 2 write)
+### `hsh.h` — Header file
 
-#### Compilation
-  
-Your shell will be compiled this way:
-```
+Contains all includes, the `extern char **environ` declaration, and all function prototypes used across the project.
+
+| Prototype | Description |
+|-----------|-------------|
+| `int main(int argc, char **argv)` | Entry point of the shell |
+| `void exec_cmd(char **args, char **argv)` | Forks and executes a command |
+| `char **parse_line(char *line)` | Tokenizes an input line into arguments |
+| `void free_args(char **args)` | Frees the argument array |
+| `char *get_path(void)` | Returns a copy of the PATH variable |
+| `char *check_cmd(char *dir, char *cmd)` | Checks if a command exists in a directory |
+| `char *find_path(char *cmd)` | Finds the full path of a command |
+| `int handle_builtins(char **args, char *line)` | Detects and executes built-in commands |
+| `void handle_env(void)` | Prints all environment variables |
+| `void handle_exit(char **args, char *line)` | Exits the shell cleanly |
+
+---
+
+### `main.c` — Entry point
+
+Contains the `main` function which drives the entire shell loop.
+
+**How it works:**
+1. Checks if the shell is running in interactive mode with `isatty` — if yes, displays the prompt `$ `
+2. Reads user input using `getline`
+3. Handles EOF (`Ctrl+D`) by exiting cleanly
+4. Parses the input line into an argument array with `parse_line`
+5. Checks for built-in commands with `handle_builtins`
+6. Resolves the full path of the command with `find_path`
+7. Replaces `args[0]` with the full path, then calls `exec_cmd`
+8. Frees all allocated memory before the next iteration
+
+| Function | Description |
+|----------|-------------|
+| `main` | Main loop of the shell |
+
+---
+
+### `shell.c` — Command execution
+
+Handles the creation of a child process and the execution of a command.
+
+**How it works:**
+1. Calls `fork()` to create a child process
+2. In the **child process**: calls `execve` with the full path, the arguments array, and the environment — the child process becomes the command
+3. In the **parent process**: calls `wait(NULL)` to wait for the child to finish before returning to the prompt
+4. If `fork` fails, prints an error with `perror`
+
+| Function | Description |
+|----------|-------------|
+| `exec_cmd(char **args, char **argv)` | Forks and executes a command via `execve` |
+
+---
+
+### `utils.c` — Input parsing
+
+Handles tokenizing the raw input line and freeing memory.
+
+**How it works:**
+1. `parse_line` allocates an array of 1024 `char *` pointers
+2. Uses `strtok` with delimiters `" \t\n"` to split the line into tokens (words)
+3. Stores each token in the array and terminates it with `NULL`
+4. `free_args` frees only the array — not the tokens themselves, since they point directly into the original `line` buffer
+
+| Function | Description |
+|----------|-------------|
+| `parse_line(char *line)` | Splits a line into a NULL-terminated array of strings |
+| `free_args(char **args)` | Frees the argument array |
+
+---
+
+### `path.c` — PATH resolution
+
+Handles finding the full executable path of a command.
+
+**How it works:**
+1. `get_path` retrieves the `PATH` environment variable and returns a `strdup` copy (necessary because `strtok` modifies the string)
+2. `check_cmd` builds a full path string (`dir + "/" + cmd`) and uses `access(X_OK)` to check if it is executable
+3. `find_path` first checks if the command is already an absolute path, then iterates through each directory in `PATH` using `strtok`, calling `check_cmd` on each one
+
+| Function | Description |
+|----------|-------------|
+| `get_path(void)` | Returns a copy of the `PATH` environment variable |
+| `check_cmd(char *dir, char *cmd)` | Returns the full path if the command exists in the given directory |
+| `find_path(char *cmd)` | Finds and returns the full executable path of a command |
+
+---
+
+### `builtins.c` — Built-in commands
+
+Handles commands that are executed directly by the shell without forking.
+
+**How it works:**
+1. `handle_builtins` compares `args[0]` against known built-in names using `strcmp`
+2. If `exit` is detected, calls `handle_exit` which frees memory and calls `exit(0)`
+3. If `env` is detected, calls `handle_env` which iterates over `environ` and prints each variable
+
+| Function | Description |
+|----------|-------------|
+| `handle_env(void)` | Prints all environment variables from `environ` |
+| `handle_exit(char **args, char *line)` | Frees memory and exits the shell |
+| `handle_builtins(char **args, char *line)` | Checks for built-ins and executes them — returns `1` if a built-in was found, `0` otherwise |
+
+---
+
+## Compilation
+
+```bash
 gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
 ```
 
-#### Testing
-  
-Your shell should work like this in interactive mode:
-```
-julien@ubuntu:/# ./hsh
-($) /bin/ls
-hsh main.c shell.c
-($)
-($) exit
-julien@ubuntu:/#
-```
-But also in non-interactive mode:
-```
-julien@ubuntu:/# echo "/bin/ls" | ./hsh
-hsh main.c shell.c test_ls_2
-julien@ubuntu:/# cat test_ls_2
-/bin/ls
-/bin/ls
-julien@ubuntu:/# cat test_ls_2 | ./hsh
-hsh main.c shell.c test_ls_2
-hsh main.c shell.c test_ls_2
-julien@ubuntu:/#
+---
+
+## Usage
+
+### Interactive mode
+
+```bash
+$ ./hsh
+$ /bin/ls
+$ ls -la
+$ exit
 ```
 
-#### Checks
-  
-The Checker will be released at the end of the project (1-2 days before the deadline). We strongly encourage the entire class to work together to create a suite of checks covering both regular tests and edge cases for each task. See task 8. ```Test suite```.
+### Non-interactive mode
 
-After the deadline, you will need to fork the repository if it's not on your Github account to be able to be corrected by the checker.
-  
-[^](#table-of-contents)
+```bash
+$ echo "/bin/ls" | ./hsh
+$ cat commands.txt | ./hsh
+```
+
+---
+
+## Built-ins
+
+| Command | Description |
+|---------|-------------|
+| `exit` | Exit the shell |
+| `env` | Print all current environment variables |
+
+---
+
+## Examples
+
+```bash
+$ ./hsh
+$ ls
+hsh  main.c  shell.c  utils.c  path.c  builtins.c  hsh.h
+$ /bin/echo Hello World
+Hello World
+$ env
+USER=ouarda
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+...
+$ exit
+```
+
+Error handling:
+
+```bash
+$ echo "qwerty" | ./hsh
+./hsh: 1: qwerty: not found
+```
+
+---
+
+## Authors
+
+- **Ouarda**
+- **Ulysse**
   

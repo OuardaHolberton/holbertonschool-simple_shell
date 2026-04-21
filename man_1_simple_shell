@@ -26,8 +26,8 @@ $ echo "exit" | ./simple_shell
 .fi
 .SH BUILTINS
 .TP
-.B exit [status]
-Exit the shell. If a status is given, it is used as the exit status.
+.B exit
+Exit the shell.
 .TP
 .B env
 Print the current environment variables.
@@ -86,3 +86,4 @@ $ exit
 .fi
 .SH AUTHORS
 Written by Ulysse and Ouarda \- Holberton School, 2026.
+
