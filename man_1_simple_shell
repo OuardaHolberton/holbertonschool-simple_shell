@@ -1,0 +1,98 @@
+.TH SIMPLE_SHELL 1 "April 2026" "Holberton School" "User Commands"
+.SH NAME
+simple_shell \- a simple UNIX command line interpreter
+.SH SYNOPSIS
+.B simple_shell
+.SH DESCRIPTION
+.B simple_shell
+is a simple UNIX command line interpreter that reads commands from standard input and executes them.
+It can operate in interactive mode (when connected to a terminal) or non-interactive mode (when reading from a pipe or file).
+.PP
+In interactive mode, the shell displays a prompt
+.B $
+and waits for the user to enter a command.
+In non-interactive mode, the shell reads and executes commands without displaying a prompt.
+.SH USAGE
+.SS Interactive mode
+.nf
+$ ./simple_shell
+$ /bin/ls
+$ exit
+.fi
+.SS Non-interactive mode
+.nf
+$ echo "/bin/ls" | ./simple_shell
+$ echo "exit" | ./simple_shell
+.fi
+.SH BUILTINS
+.TP
+.B exit
+Exit the shell.
+.TP
+.B env
+Print the current environment variables.
+.SH FUNCTIONS
+The following functions are used internally by
+.B simple_shell:
+.TP
+.B fork(2)
+Creates a child process to execute commands.
+.TP
+.B execve(2)
+Executes a program in the context of the child process.
+.TP
+.B wait(2)
+Waits for the child process to finish before returning to the prompt.
+.TP
+.B exit(3)
+Cause normal process termination.
+.TP
+.B getenv(3)
+Retrieves the value of the PATH environment variable to locate executables.
+.TP
+.B getpid(2)
+Returns the process ID of the current process.
+.TP
+.B access(2)
+Checks whether a file exists and is executable before calling execve.
+.TP
+.B isatty(3)
+Determines whether the shell is running in interactive or non-interactive mode.
+.TP
+.B getline(3)
+Reads a line of input from standard input.
+.TP
+.B strtok(3)
+Tokenizes the input line into command name and arguments.
+.TP
+.B strcmp(3)
+Compares strings, used notably to identify builtin commands.
+.TP
+.B free(3)
+Frees dynamically allocated memory.
+.SH EXIT STATUS
+.TP
+.B 0
+Success.
+.TP
+.B 1
+Command not found or execution failed.
+.SH RETURN VALUE
+Returns the exit status of the last command executed.
+.SH ENVIRONMENT
+.TP
+.B PATH
+A colon-separated list of directories in which the shell looks for commands.
+.SH EXAMPLES
+.nf
+$ ./simple_shell
+$ ls -la
+$ /bin/echo Hello World
+$ env
+$ exit
+.fi
+.SH SEE ALSO
+sh(1), bash(1), execve(2), fork(2), wait(2), getline(3), strtok(3), isatty(3)
+.SH AUTHORS
+Written by Ulysse and Ouarda \- Holberton School, 2026.
+
