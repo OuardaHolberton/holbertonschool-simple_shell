@@ -11,18 +11,22 @@ int main(int argc, char **argv)
 	size_t len = 0;
 	char **args;
 	char *full_path;
+	int line_count;
 
 	(void)argc;
+	line_count = 0;
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
 			write(STDOUT_FILENO, "$ ", 2);
 		if (getline(&line, &len, stdin) == -1)
 		{
-			write(STDOUT_FILENO, "\n", 1);
+			if (isatty(STDIN_FILENO))
+				write(STDOUT_FILENO, "\n", 1);
 			free(line);
 			return (0);
 		}
+		line_count++;
 		args = parse_line(line);
 		if (args[0] == NULL)
 		{
@@ -34,7 +38,8 @@ int main(int argc, char **argv)
 		full_path = find_path(args[0]);
 		if (full_path == NULL)
 		{
-			fprintf(stderr, "%s: 1: %s: not found\n", argv[0], args[0]);
+			fprintf(stderr, "%s: %d: %s: not found\n",
+				argv[0], line_count, args[0]);
 			free_args(args);
 			continue;
 		}

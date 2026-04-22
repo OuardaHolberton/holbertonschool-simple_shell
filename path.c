@@ -2,29 +2,27 @@
 
 /**
  * get_path - get PATH environment variable
- * Return:	copy of PATH string
- *			NULL if not found
+ * Return: copy of PATH string, or NULL if not found
  */
 char *get_path(void)
 {
-	char *path;
+	int i;
 
-	path = getenv("PATH");
-	if (path == NULL)
+	i = 0;
+	while (environ[i])
 	{
-		return (NULL);
+		if (strncmp(environ[i], "PATH=", 5) == 0)
+			return (strdup(environ[i] + 5));
+		i++;
 	}
-	return (strdup(path));
+	return (NULL);
 }
-
-
 
 /**
  * check_cmd - does command exists in directory?
  * @dir: directory to check
  * @cmd: command to look for
- * Return:	full path if found
- *			else NULL
+ * Return: full path if found, else NULL
  */
 char *check_cmd(char *dir, char *cmd)
 {
@@ -42,21 +40,15 @@ char *check_cmd(char *dir, char *cmd)
 	strcat(full_path, "/");
 	strcat(full_path, cmd);
 	if (access(full_path, X_OK) == 0)
-	{
 		return (full_path);
-	}
 	free(full_path);
-
 	return (NULL);
 }
-
-
 
 /**
  * find_path - find full path of a command
  * @cmd: command to find
- * Return:	full path if found
- *			else NULL
+ * Return: full path if found, else NULL
  */
 char *find_path(char *cmd)
 {
@@ -65,14 +57,10 @@ char *find_path(char *cmd)
 	char *full_path;
 
 	if (access(cmd, X_OK) == 0)
-	{
 		return (strdup(cmd));
-	}
 	path = get_path();
 	if (path == NULL)
-	{
 		return (NULL);
-	}
 	dir = strtok(path, ":");
 	while (dir != NULL)
 	{
@@ -80,12 +68,10 @@ char *find_path(char *cmd)
 		if (full_path != NULL)
 		{
 			free(path);
-
 			return (full_path);
 		}
 		dir = strtok(NULL, ":");
 	}
 	free(path);
-
 	return (NULL);
 }
