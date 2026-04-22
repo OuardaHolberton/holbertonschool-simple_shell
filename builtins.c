@@ -23,8 +23,8 @@ void handle_env(void)
  */
 void handle_exit(char **args, char *line)
 {
-	(void)args;
-	(void)line;
+	free(line);
+	free(args);
 	exit(0);
 }
 
@@ -36,7 +36,6 @@ void handle_exit(char **args, char *line)
  */
 int handle_builtins(char **args, char *line)
 {
-	(void)line;
 	if (strcmp(args[0], "exit") == 0)
 	{
 		handle_exit(args, line);

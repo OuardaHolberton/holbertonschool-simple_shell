@@ -56,8 +56,12 @@ char *find_path(char *cmd)
 	char *dir;
 	char *full_path;
 
-	if (access(cmd, X_OK) == 0)
-		return (strdup(cmd));
+	if (strchr(cmd, '/') != NULL)
+	{
+		if (access(cmd, X_OK) == 0)
+			return (strdup(cmd));
+		return (NULL);
+	}
 	path = get_path();
 	if (path == NULL)
 		return (NULL);
