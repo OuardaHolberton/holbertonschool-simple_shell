@@ -1,4 +1,4 @@
-# 🐚 Simple Shell — hsh
+#  Simple Shell — hsh
 
 > A simple UNIX command line interpreter written in C.  
 > Project by **Ouarda** & **Ulysse** — Holberton School.
