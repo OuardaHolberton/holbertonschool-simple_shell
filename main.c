@@ -34,7 +34,10 @@ int main(int argc, char **argv)
 			continue;
 		}
 		if (handle_builtins(args, line))
+		{
+			free_args(args);
 			continue;
+		}
 		full_path = find_path(args[0]);
 		if (full_path == NULL)
 		{
