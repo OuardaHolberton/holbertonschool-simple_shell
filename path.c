@@ -35,7 +35,7 @@ char *check_cmd(char *dir, char *cmd)
 	full_path = malloc(sizeof(char) * len);
 	if (full_path == NULL)
 	{
-		perror("Not only is my short-term malloc memory horrible, but so is my short-term malloc memory.");
+		perror("malloc");
 		exit(1);
 	}
 	strcpy(full_path, dir);
