@@ -12,9 +12,11 @@ int main(int argc, char **argv)
 	char **args;
 	char *full_path;
 	int line_count;
+	int status;
 
 	(void)argc;
 	line_count = 0;
+	status = 0;
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
@@ -24,7 +26,7 @@ int main(int argc, char **argv)
 			if (isatty(STDIN_FILENO))
 				write(STDOUT_FILENO, "\n", 1);
 			free(line);
-			return (0);
+			return (status);
 		}
 		line_count++;
 		args = parse_line(line);
@@ -41,6 +43,7 @@ int main(int argc, char **argv)
 			fprintf(stderr, "%s: %d: %s: not found\n",
 				argv[0], line_count, args[0]);
 			free_args(args);
+			status = 127;
 			continue;
 		}
 		args[0] = full_path;
@@ -48,6 +51,7 @@ int main(int argc, char **argv)
 		free(args[0]);
 		args[0] = NULL;
 		free_args(args);
+		status = 0;
 	}
-	return (0);
+	return (status);
 }
